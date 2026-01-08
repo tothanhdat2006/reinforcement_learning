@@ -3,7 +3,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 class Bandit:
-    def __init__(self, k=10, eps=0.0, initial_q=0.0, sample_average=True, step_size=0.1):
+    def __init__(self, k=10, eps=0.0, initial_q=0.0, sample_average=True, step_size=0.1, random_walk=False):
         self.k = k
 
         self.q_true = [np.random.normal(0.0, 1.0) + initial_q for _ in range(k)]
@@ -16,9 +16,10 @@ class Bandit:
 
         self.eps = eps
         self.initial_q = initial_q
+        self.random_walk = random_walk
 
-    def get_reward(self, action, random_walk=False):
-        if random_walk:
+    def get_reward(self, action):
+        if self.random_walk:
             return np.random.normal(self.q_true[action], 1.0) + np.random.normal(0.0, 0.01)
         else:
             return np.random.normal(self.q_true[action], 1.0)
@@ -116,8 +117,8 @@ def figure23():
     num_steps = 10000
     eps = 0.1
     step_size = 0.1
-    bandit_sample_avg = Bandit(k=k, eps=eps, initial_q=0.0, sample_average=True, step_size=None)
-    bandit_const_step = Bandit(k=k, eps=eps, initial_q=0.0, sample_average=False, step_size=step_size)
+    bandit_sample_avg = Bandit(k=k, eps=eps, initial_q=0.0, sample_average=True, step_size=None, random_walk=True)
+    bandit_const_step = Bandit(k=k, eps=eps, initial_q=0.0, sample_average=False, step_size=step_size, random_walk=True)
 
     # sample average
     plt.figure(figsize=(12, 8))
